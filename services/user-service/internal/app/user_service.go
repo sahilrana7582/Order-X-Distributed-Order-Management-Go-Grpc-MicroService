@@ -7,6 +7,7 @@ import (
 	pb "github.com/sahilrana7582/orderX/pkg/generated/user"
 	"github.com/sahilrana7582/user-service/internal/domain"
 	"github.com/sahilrana7582/user-service/internal/repository"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type UserService struct {
@@ -59,36 +60,55 @@ func (s *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, req *pb.GetUserByIDRequest) (*pb.GetUserByIDResponse, error) {
-	fmt.Printf("Get user by ID: %v\n", req.Id)
+
+	user, err := s.userRepo.GetByID(ctx, req.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user by ID: %v", err)
+	}
 
 	return &pb.GetUserByIDResponse{
 		User: &pb.User{
-			Id:     req.Id,
-			Name:   "Mock User",
-			Email:  "mock@example.com",
-			Role:   pb.UserRole_USER_ROLE_USER,
-			Status: pb.UserStatus_USER_STATUS_ACTIVE,
+			Id:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			Role:      pb.UserRole_USER_ROLE_USER,
+			Status:    pb.UserStatus_USER_STATUS_ACTIVE,
+			CreatedAt: timestamppb.Now(),
+			UpdatedAt: timestamppb.Now(),
 		},
 	}, nil
 }
 
 func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
-	fmt.Printf("Update user: ID=%v, Name=%v, Email=%v, Role=%v, Status=%v\n",
-		req.Id, req.Name, req.Email, req.Role, req.Status)
 
+	user, err := s.userRepo.Update(ctx, req.Id, &domain.UpdateUserRequest{
+		Name:   req.Name,
+		Email:  req.Email,
+		Role:   req.Role.String(),
+		Status: req.Status.String(),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user: %v", err)
+	}
 	return &pb.UpdateUserResponse{
 		User: &pb.User{
-			Id:     req.Id,
-			Name:   req.Name,
-			Email:  req.Email,
-			Role:   req.Role,
-			Status: req.Status,
+			Id:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			Role:      pb.UserRole_USER_ROLE_USER,
+			Status:    pb.UserStatus_USER_STATUS_ACTIVE,
+			CreatedAt: timestamppb.Now(),
+			UpdatedAt: timestamppb.Now(),
 		},
 	}, nil
 }
 
 func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
-	fmt.Printf("Delete user: ID=%v\n", req.Id)
+
+	err := s.userRepo.Delete(ctx, req.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete user: %v", err)
+	}
 
 	return &pb.DeleteUserResponse{
 		Message: fmt.Sprintf("User with ID %s deleted successfully", req.Id),
@@ -98,25 +118,25 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 func (s *UserService) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	fmt.Printf("List users: Page=%v, Limit=%v\n", req.Page, req.Limit)
 
-	users := []*pb.User{
-		{
-			Id:     "user1",
-			Name:   "User One",
-			Email:  "user1@example.com",
-			Role:   pb.UserRole_USER_ROLE_USER,
-			Status: pb.UserStatus_USER_STATUS_ACTIVE,
-		},
-		{
-			Id:     "user2",
-			Name:   "User Two",
-			Email:  "user2@example.com",
-			Role:   pb.UserRole_USER_ROLE_ADMIN,
-			Status: pb.UserStatus_USER_STATUS_ACTIVE,
-		},
+	users, err := s.userRepo.List(ctx, int(req.Limit), int(req.Page)*int(req.Limit))
+	if err != nil {
+		return nil, fmt.Errorf("failed to list users: %v", err)
+	}
+	var pbUsers []*pb.User
+	for _, user := range users {
+		pbUsers = append(pbUsers, &pb.User{
+			Id:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			Role:      pb.UserRole_USER_ROLE_USER,
+			Status:    pb.UserStatus_USER_STATUS_ACTIVE,
+			CreatedAt: timestamppb.Now(),
+			UpdatedAt: timestamppb.Now(),
+		})
 	}
 
 	return &pb.ListUsersResponse{
-		Users: users,
+		Users: pbUsers,
 		Total: int32(len(users)),
 	}, nil
 }
