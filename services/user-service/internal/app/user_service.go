@@ -27,7 +27,6 @@ func (s *UserService) RegisterUser(ctx context.Context, req *pb.RegisterUserRequ
 func (s *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
 	fmt.Printf("Login user: Email=%v, Password=%v\n", req.Email, req.Password)
 
-	// Returning mock token and user data
 	return &pb.LoginUserResponse{
 		Token: "mock-jwt-token",
 		User: &pb.User{
@@ -43,7 +42,6 @@ func (s *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 func (s *UserService) GetUserByID(ctx context.Context, req *pb.GetUserByIDRequest) (*pb.GetUserByIDResponse, error) {
 	fmt.Printf("Get user by ID: %v\n", req.Id)
 
-	// Return a mock user
 	return &pb.GetUserByIDResponse{
 		User: &pb.User{
 			Id:     req.Id,
@@ -59,7 +57,6 @@ func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	fmt.Printf("Update user: ID=%v, Name=%v, Email=%v, Role=%v, Status=%v\n",
 		req.Id, req.Name, req.Email, req.Role, req.Status)
 
-	// Return updated mock user
 	return &pb.UpdateUserResponse{
 		User: &pb.User{
 			Id:     req.Id,
@@ -82,7 +79,6 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 func (s *UserService) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	fmt.Printf("List users: Page=%v, Limit=%v\n", req.Page, req.Limit)
 
-	// Return mock users list
 	users := []*pb.User{
 		{
 			Id:     "user1",

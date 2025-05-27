@@ -17,7 +17,7 @@ type Config struct {
 
 type DBConfig struct {
 	Host     string
-	Port     int
+	Port     string
 	User     string
 	Password string
 	Name     string
@@ -44,7 +44,7 @@ func LoadConfig() (*Config, error) {
 	cfg := &Config{
 		DB: DBConfig{
 			Host:     utils.GetEnv("DB_HOST", "localhost"),
-			Port:     utils.GetEnv("DB_PORT", 5432),
+			Port:     utils.GetEnv("DB_PORT", "5432"),
 			User:     utils.GetEnv("DB_USER", "postgres"),
 			Password: utils.GetEnv("DB_PASSWORD", "1234"),
 			Name:     utils.GetEnv("DB_NAME", "orderX"),
