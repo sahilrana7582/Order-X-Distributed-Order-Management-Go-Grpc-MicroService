@@ -5,23 +5,42 @@ import (
 	"fmt"
 
 	pb "github.com/sahilrana7582/orderX/pkg/generated/user"
+	"github.com/sahilrana7582/user-service/internal/domain"
+	"github.com/sahilrana7582/user-service/internal/repository"
 )
 
 type UserService struct {
 	pb.UnimplementedUserServiceServer
+	userRepo repository.UserRepository
 }
 
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(userRepo repository.UserRepository) *UserService {
+	return &UserService{
+		userRepo: userRepo,
+	}
 }
 
 func (s *UserService) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) (*pb.RegisterUserResponse, error) {
-	fmt.Printf("Register user: Name=%v, Email=%v, Password=%v\n", req.Name, req.Email, req.Password)
+	var user domain.User
+
+	user = domain.User{
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
+		Role:     "USER",
+		Status:   "ACTIVE",
+	}
+
+	err := s.userRepo.Create(ctx, &user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to register user: %v", err)
+	}
 
 	return &pb.RegisterUserResponse{
-		Id:      "mock-user-id",
-		Message: "User registered successfully",
+		Id:      user.ID,
+		Message: fmt.Sprintf("User %s registered successfully", user.Name),
 	}, nil
+
 }
 
 func (s *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {

@@ -1,23 +1,30 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net"
 
+	pb "github.com/sahilrana7582/orderX/pkg/generated/user"
 	"github.com/sahilrana7582/user-service/configs"
 	"github.com/sahilrana7582/user-service/internal/app"
 	"github.com/sahilrana7582/user-service/internal/db"
+	"github.com/sahilrana7582/user-service/internal/repository/postgres"
 	"github.com/sahilrana7582/user-service/internal/utils"
 	"google.golang.org/grpc"
-
-	pb "github.com/sahilrana7582/orderX/pkg/generated/user"
 )
+
+type Application struct {
+	Config     *configs.Config
+	LoggerInfo *log.Logger
+	LoggerErr  *log.Logger
+	DB         *sql.DB
+	UserSrv    *app.UserService
+}
 
 func main() {
 
-	//Logger Init
-	//infoLog, errorLog := utils.InitLogger()
 	infoLog, errLog := utils.InitLogger()
 
 	cfg, err := configs.LoadConfig()
@@ -34,7 +41,6 @@ func main() {
 		cfg.DB.Name,
 		cfg.DB.SSLMode,
 	)
-
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
@@ -45,9 +51,10 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	userRepo := postgres.NewUserRepository(db.DB)
 
-	pb.RegisterUserServiceServer(grpcServer, app.NewUserService())
+	grpcServer := grpc.NewServer()
+	pb.RegisterUserServiceServer(grpcServer, app.NewUserService(userRepo))
 
 	infoLog.Printf("gRPC server listening on %s", address)
 	if err := grpcServer.Serve(lis); err != nil {
