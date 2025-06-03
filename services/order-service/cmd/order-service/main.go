@@ -3,12 +3,16 @@ package main
 import (
 	"database/sql"
 	"log"
+	"net"
 	"sync"
 
 	_ "github.com/lib/pq"
 	"github.com/sahilrana7582/order-service/configs"
+	"github.com/sahilrana7582/order-service/internal/app"
 	"github.com/sahilrana7582/order-service/internal/db"
 	"github.com/sahilrana7582/order-service/internal/utils"
+	pb "github.com/sahilrana7582/orderX/pkg/generated/order"
+	"google.golang.org/grpc"
 )
 
 type Application struct {
@@ -63,11 +67,28 @@ func (app *Application) Close() error {
 }
 
 func main() {
-	app, err := NewApplication()
+	application, err := NewApplication()
 	if err != nil {
 		log.Fatalf("Failed to initialize application: %v", err)
 	}
-	defer app.Close()
+	defer application.Close()
 
-	app.Info("Application started successfully")
+	application.Info("Starting application...")
+
+	grpcServer := grpc.NewServer()
+
+	pb.RegisterOrderServiceServer(grpcServer, app.NewOrderService())
+
+	application.Info("Application started successfully")
+
+	lis, err := net.Listen("tcp", ":50052")
+	if err != nil {
+		application.Error("Failed to listen on port 50052: %v", err)
+		log.Fatalf("failed to listen: %v", err)
+	}
+	application.Info("gRPC server listening on port 50052")
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve grpc: %v", err)
+	}
 }
