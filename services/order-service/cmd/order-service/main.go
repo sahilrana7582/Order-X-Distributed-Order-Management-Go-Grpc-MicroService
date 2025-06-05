@@ -10,16 +10,20 @@ import (
 	"github.com/sahilrana7582/order-service/configs"
 	"github.com/sahilrana7582/order-service/internal/app"
 	"github.com/sahilrana7582/order-service/internal/db"
+	"github.com/sahilrana7582/order-service/internal/repository"
+	"github.com/sahilrana7582/order-service/internal/repository/impl"
 	"github.com/sahilrana7582/order-service/internal/utils"
 	pb "github.com/sahilrana7582/orderX/pkg/generated/order"
 	"google.golang.org/grpc"
 )
 
 type Application struct {
-	Config      *configs.Config
-	LoggerInfo  *log.Logger
-	LoggerError *log.Logger
-	DB          *sql.DB
+	Config       *configs.Config
+	LoggerInfo   *log.Logger
+	LoggerError  *log.Logger
+	DB           *sql.DB
+	OrderRepo    repository.OrderRepository
+	OrderService *app.OrderService
 
 	mu sync.RWMutex
 }
@@ -39,11 +43,25 @@ func NewApplication() (*Application, error) {
 		return nil, err
 	}
 
+	repo := impl.NewOrderRepository(conn)
+	if repo == nil {
+		errLog.Println("Error initializing order repository")
+		return nil, err
+	}
+
+	orderService := app.NewOrderService(repo)
+	if orderService == nil {
+		errLog.Println("Error initializing order service")
+		return nil, err
+	}
+
 	app := &Application{
-		Config:      cfg,
-		LoggerInfo:  infoLog,
-		LoggerError: errLog,
-		DB:          conn,
+		Config:       cfg,
+		LoggerInfo:   infoLog,
+		LoggerError:  errLog,
+		DB:           conn,
+		OrderRepo:    repo,
+		OrderService: orderService,
 	}
 
 	app.LoggerInfo.Println("Application initialized with config:", cfg)
@@ -77,7 +95,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterOrderServiceServer(grpcServer, app.NewOrderService())
+	pb.RegisterOrderServiceServer(grpcServer, app.NewOrderService(application.OrderRepo))
 
 	application.Info("Application started successfully")
 

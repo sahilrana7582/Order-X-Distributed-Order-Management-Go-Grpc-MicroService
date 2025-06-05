@@ -1,3 +1,4 @@
+-- enums.sql
 CREATE TYPE order_status AS ENUM (
     'PENDING',
     'CONFIRMED',
@@ -23,8 +24,8 @@ CREATE TYPE shipping_method AS ENUM (
 );
 
 CREATE TABLE orders (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    customer_id UUID NOT NULL,
+    id VARCHAR(50) PRIMARY KEY DEFAULT gen_random_uuid(),
+    customer_id VARCHAR(50) NOT NULL,
     order_number VARCHAR(50) NOT NULL,
     order_status order_status NOT NULL DEFAULT 'PENDING',
     payment_status payment_status NOT NULL DEFAULT 'UNPAID',

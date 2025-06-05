@@ -21,16 +21,183 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type OrderStatus int32
+
+const (
+	OrderStatus_PENDING    OrderStatus = 0
+	OrderStatus_CONFIRMED  OrderStatus = 1
+	OrderStatus_PROCESSING OrderStatus = 2
+	OrderStatus_SHIPPED    OrderStatus = 3
+	OrderStatus_DELIVERED  OrderStatus = 4
+	OrderStatus_CANCELLED  OrderStatus = 5
+	OrderStatus_RETURNED   OrderStatus = 6
+)
+
+// Enum value maps for OrderStatus.
+var (
+	OrderStatus_name = map[int32]string{
+		0: "PENDING",
+		1: "CONFIRMED",
+		2: "PROCESSING",
+		3: "SHIPPED",
+		4: "DELIVERED",
+		5: "CANCELLED",
+		6: "RETURNED",
+	}
+	OrderStatus_value = map[string]int32{
+		"PENDING":    0,
+		"CONFIRMED":  1,
+		"PROCESSING": 2,
+		"SHIPPED":    3,
+		"DELIVERED":  4,
+		"CANCELLED":  5,
+		"RETURNED":   6,
+	}
+)
+
+func (x OrderStatus) Enum() *OrderStatus {
+	p := new(OrderStatus)
+	*p = x
+	return p
+}
+
+func (x OrderStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (OrderStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_order_order_proto_enumTypes[0].Descriptor()
+}
+
+func (OrderStatus) Type() protoreflect.EnumType {
+	return &file_order_order_proto_enumTypes[0]
+}
+
+func (x OrderStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use OrderStatus.Descriptor instead.
+func (OrderStatus) EnumDescriptor() ([]byte, []int) {
+	return file_order_order_proto_rawDescGZIP(), []int{0}
+}
+
+type PaymentStatus int32
+
+const (
+	PaymentStatus_UNPAID   PaymentStatus = 0
+	PaymentStatus_PAID     PaymentStatus = 1
+	PaymentStatus_REFUNDED PaymentStatus = 2
+	PaymentStatus_FAILED   PaymentStatus = 3
+)
+
+// Enum value maps for PaymentStatus.
+var (
+	PaymentStatus_name = map[int32]string{
+		0: "UNPAID",
+		1: "PAID",
+		2: "REFUNDED",
+		3: "FAILED",
+	}
+	PaymentStatus_value = map[string]int32{
+		"UNPAID":   0,
+		"PAID":     1,
+		"REFUNDED": 2,
+		"FAILED":   3,
+	}
+)
+
+func (x PaymentStatus) Enum() *PaymentStatus {
+	p := new(PaymentStatus)
+	*p = x
+	return p
+}
+
+func (x PaymentStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (PaymentStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_order_order_proto_enumTypes[1].Descriptor()
+}
+
+func (PaymentStatus) Type() protoreflect.EnumType {
+	return &file_order_order_proto_enumTypes[1]
+}
+
+func (x PaymentStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use PaymentStatus.Descriptor instead.
+func (PaymentStatus) EnumDescriptor() ([]byte, []int) {
+	return file_order_order_proto_rawDescGZIP(), []int{1}
+}
+
+type ShippingMethod int32
+
+const (
+	ShippingMethod_STANDARD ShippingMethod = 0
+	ShippingMethod_EXPRESS  ShippingMethod = 1
+	ShippingMethod_SAME_DAY ShippingMethod = 2
+	ShippingMethod_PICKUP   ShippingMethod = 3
+)
+
+// Enum value maps for ShippingMethod.
+var (
+	ShippingMethod_name = map[int32]string{
+		0: "STANDARD",
+		1: "EXPRESS",
+		2: "SAME_DAY",
+		3: "PICKUP",
+	}
+	ShippingMethod_value = map[string]int32{
+		"STANDARD": 0,
+		"EXPRESS":  1,
+		"SAME_DAY": 2,
+		"PICKUP":   3,
+	}
+)
+
+func (x ShippingMethod) Enum() *ShippingMethod {
+	p := new(ShippingMethod)
+	*p = x
+	return p
+}
+
+func (x ShippingMethod) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ShippingMethod) Descriptor() protoreflect.EnumDescriptor {
+	return file_order_order_proto_enumTypes[2].Descriptor()
+}
+
+func (ShippingMethod) Type() protoreflect.EnumType {
+	return &file_order_order_proto_enumTypes[2]
+}
+
+func (x ShippingMethod) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ShippingMethod.Descriptor instead.
+func (ShippingMethod) EnumDescriptor() ([]byte, []int) {
+	return file_order_order_proto_rawDescGZIP(), []int{2}
+}
+
 type Order struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ProductId     string                 `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Quantity      int32                  `protobuf:"varint,4,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
-	TotalPrice    string                 `protobuf:"bytes,6,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CustomerId     string                 `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	OrderNumber    string                 `protobuf:"bytes,3,opt,name=order_number,json=orderNumber,proto3" json:"order_number,omitempty"`
+	OrderStatus    OrderStatus            `protobuf:"varint,4,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	PaymentStatus  PaymentStatus          `protobuf:"varint,5,opt,name=payment_status,json=paymentStatus,proto3,enum=order.PaymentStatus" json:"payment_status,omitempty"`
+	ShippingMethod ShippingMethod         `protobuf:"varint,6,opt,name=shipping_method,json=shippingMethod,proto3,enum=order.ShippingMethod" json:"shipping_method,omitempty"`
+	TotalAmount    float64                `protobuf:"fixed64,7,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	Currency       string                 `protobuf:"bytes,8,opt,name=currency,proto3" json:"currency,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Order) Reset() {
@@ -70,48 +237,66 @@ func (x *Order) GetId() string {
 	return ""
 }
 
-func (x *Order) GetUserId() string {
+func (x *Order) GetCustomerId() string {
 	if x != nil {
-		return x.UserId
+		return x.CustomerId
 	}
 	return ""
 }
 
-func (x *Order) GetProductId() string {
+func (x *Order) GetOrderNumber() string {
 	if x != nil {
-		return x.ProductId
+		return x.OrderNumber
 	}
 	return ""
 }
 
-func (x *Order) GetQuantity() int32 {
+func (x *Order) GetOrderStatus() OrderStatus {
 	if x != nil {
-		return x.Quantity
+		return x.OrderStatus
+	}
+	return OrderStatus_PENDING
+}
+
+func (x *Order) GetPaymentStatus() PaymentStatus {
+	if x != nil {
+		return x.PaymentStatus
+	}
+	return PaymentStatus_UNPAID
+}
+
+func (x *Order) GetShippingMethod() ShippingMethod {
+	if x != nil {
+		return x.ShippingMethod
+	}
+	return ShippingMethod_STANDARD
+}
+
+func (x *Order) GetTotalAmount() float64 {
+	if x != nil {
+		return x.TotalAmount
 	}
 	return 0
 }
 
-func (x *Order) GetStatus() string {
+func (x *Order) GetCurrency() string {
 	if x != nil {
-		return x.Status
-	}
-	return ""
-}
-
-func (x *Order) GetTotalPrice() string {
-	if x != nil {
-		return x.TotalPrice
+		return x.Currency
 	}
 	return ""
 }
 
 type CreateOrderRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ProductId     string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	CustomerId     string                 `protobuf:"bytes,1,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	OrderNumber    string                 `protobuf:"bytes,2,opt,name=order_number,json=orderNumber,proto3" json:"order_number,omitempty"`
+	OrderStatus    OrderStatus            `protobuf:"varint,3,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	PaymentStatus  PaymentStatus          `protobuf:"varint,4,opt,name=payment_status,json=paymentStatus,proto3,enum=order.PaymentStatus" json:"payment_status,omitempty"`
+	ShippingMethod ShippingMethod         `protobuf:"varint,5,opt,name=shipping_method,json=shippingMethod,proto3,enum=order.ShippingMethod" json:"shipping_method,omitempty"`
+	TotalAmount    float64                `protobuf:"fixed64,6,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	Currency       string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *CreateOrderRequest) Reset() {
@@ -144,30 +329,59 @@ func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateOrderRequest) GetUserId() string {
+func (x *CreateOrderRequest) GetCustomerId() string {
 	if x != nil {
-		return x.UserId
+		return x.CustomerId
 	}
 	return ""
 }
 
-func (x *CreateOrderRequest) GetProductId() string {
+func (x *CreateOrderRequest) GetOrderNumber() string {
 	if x != nil {
-		return x.ProductId
+		return x.OrderNumber
 	}
 	return ""
 }
 
-func (x *CreateOrderRequest) GetQuantity() int32 {
+func (x *CreateOrderRequest) GetOrderStatus() OrderStatus {
 	if x != nil {
-		return x.Quantity
+		return x.OrderStatus
+	}
+	return OrderStatus_PENDING
+}
+
+func (x *CreateOrderRequest) GetPaymentStatus() PaymentStatus {
+	if x != nil {
+		return x.PaymentStatus
+	}
+	return PaymentStatus_UNPAID
+}
+
+func (x *CreateOrderRequest) GetShippingMethod() ShippingMethod {
+	if x != nil {
+		return x.ShippingMethod
+	}
+	return ShippingMethod_STANDARD
+}
+
+func (x *CreateOrderRequest) GetTotalAmount() float64 {
+	if x != nil {
+		return x.TotalAmount
 	}
 	return 0
 }
 
+func (x *CreateOrderRequest) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
 type CreateOrderResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Order         *Order                 `protobuf:"bytes,1,opt,name=order,proto3" json:"order,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -202,34 +416,69 @@ func (*CreateOrderResponse) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateOrderResponse) GetOrder() *Order {
+func (x *CreateOrderResponse) GetId() string {
 	if x != nil {
-		return x.Order
+		return x.Id
 	}
-	return nil
+	return ""
+}
+
+func (x *CreateOrderResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
 }
 
 var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\"\xa4\x01\n" +
+	"\x11order/order.proto\x12\x05order\"\xce\x02\n" +
 	"\x05Order\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
+	"\vcustomer_id\x18\x02 \x01(\tR\n" +
+	"customerId\x12!\n" +
+	"\forder_number\x18\x03 \x01(\tR\vorderNumber\x125\n" +
+	"\forder_status\x18\x04 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12;\n" +
+	"\x0epayment_status\x18\x05 \x01(\x0e2\x14.order.PaymentStatusR\rpaymentStatus\x12>\n" +
+	"\x0fshipping_method\x18\x06 \x01(\x0e2\x15.order.ShippingMethodR\x0eshippingMethod\x12!\n" +
+	"\ftotal_amount\x18\a \x01(\x01R\vtotalAmount\x12\x1a\n" +
+	"\bcurrency\x18\b \x01(\tR\bcurrency\"\xcb\x02\n" +
+	"\x12CreateOrderRequest\x12\x1f\n" +
+	"\vcustomer_id\x18\x01 \x01(\tR\n" +
+	"customerId\x12!\n" +
+	"\forder_number\x18\x02 \x01(\tR\vorderNumber\x125\n" +
+	"\forder_status\x18\x03 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12;\n" +
+	"\x0epayment_status\x18\x04 \x01(\x0e2\x14.order.PaymentStatusR\rpaymentStatus\x12>\n" +
+	"\x0fshipping_method\x18\x05 \x01(\x0e2\x15.order.ShippingMethodR\x0eshippingMethod\x12!\n" +
+	"\ftotal_amount\x18\x06 \x01(\x01R\vtotalAmount\x12\x1a\n" +
+	"\bcurrency\x18\a \x01(\tR\bcurrency\"?\n" +
+	"\x13CreateOrderResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage*r\n" +
+	"\vOrderStatus\x12\v\n" +
+	"\aPENDING\x10\x00\x12\r\n" +
+	"\tCONFIRMED\x10\x01\x12\x0e\n" +
 	"\n" +
-	"product_id\x18\x03 \x01(\tR\tproductId\x12\x1a\n" +
-	"\bquantity\x18\x04 \x01(\x05R\bquantity\x12\x16\n" +
-	"\x06status\x18\x05 \x01(\tR\x06status\x12\x1f\n" +
-	"\vtotal_price\x18\x06 \x01(\tR\n" +
-	"totalPrice\"h\n" +
-	"\x12CreateOrderRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
+	"PROCESSING\x10\x02\x12\v\n" +
+	"\aSHIPPED\x10\x03\x12\r\n" +
+	"\tDELIVERED\x10\x04\x12\r\n" +
+	"\tCANCELLED\x10\x05\x12\f\n" +
+	"\bRETURNED\x10\x06*?\n" +
+	"\rPaymentStatus\x12\n" +
 	"\n" +
-	"product_id\x18\x02 \x01(\tR\tproductId\x12\x1a\n" +
-	"\bquantity\x18\x03 \x01(\x05R\bquantity\"9\n" +
-	"\x13CreateOrderResponse\x12\"\n" +
-	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order2T\n" +
+	"\x06UNPAID\x10\x00\x12\b\n" +
+	"\x04PAID\x10\x01\x12\f\n" +
+	"\bREFUNDED\x10\x02\x12\n" +
+	"\n" +
+	"\x06FAILED\x10\x03*E\n" +
+	"\x0eShippingMethod\x12\f\n" +
+	"\bSTANDARD\x10\x00\x12\v\n" +
+	"\aEXPRESS\x10\x01\x12\f\n" +
+	"\bSAME_DAY\x10\x02\x12\n" +
+	"\n" +
+	"\x06PICKUP\x10\x032T\n" +
 	"\fOrderService\x12D\n" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponseB;Z9github.com/sahilrana7582/orderX/pkg/generated/order;orderb\x06proto3"
 
@@ -245,21 +494,30 @@ func file_order_order_proto_rawDescGZIP() []byte {
 	return file_order_order_proto_rawDescData
 }
 
+var file_order_order_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_order_order_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_order_order_proto_goTypes = []any{
-	(*Order)(nil),               // 0: order.Order
-	(*CreateOrderRequest)(nil),  // 1: order.CreateOrderRequest
-	(*CreateOrderResponse)(nil), // 2: order.CreateOrderResponse
+	(OrderStatus)(0),            // 0: order.OrderStatus
+	(PaymentStatus)(0),          // 1: order.PaymentStatus
+	(ShippingMethod)(0),         // 2: order.ShippingMethod
+	(*Order)(nil),               // 3: order.Order
+	(*CreateOrderRequest)(nil),  // 4: order.CreateOrderRequest
+	(*CreateOrderResponse)(nil), // 5: order.CreateOrderResponse
 }
 var file_order_order_proto_depIdxs = []int32{
-	0, // 0: order.CreateOrderResponse.order:type_name -> order.Order
-	1, // 1: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	2, // 2: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 0: order.Order.order_status:type_name -> order.OrderStatus
+	1, // 1: order.Order.payment_status:type_name -> order.PaymentStatus
+	2, // 2: order.Order.shipping_method:type_name -> order.ShippingMethod
+	0, // 3: order.CreateOrderRequest.order_status:type_name -> order.OrderStatus
+	1, // 4: order.CreateOrderRequest.payment_status:type_name -> order.PaymentStatus
+	2, // 5: order.CreateOrderRequest.shipping_method:type_name -> order.ShippingMethod
+	4, // 6: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5, // 7: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	7, // [7:8] is the sub-list for method output_type
+	6, // [6:7] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }
@@ -272,13 +530,14 @@ func file_order_order_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_order_order_proto_rawDesc), len(file_order_order_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      3,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_order_order_proto_goTypes,
 		DependencyIndexes: file_order_order_proto_depIdxs,
+		EnumInfos:         file_order_order_proto_enumTypes,
 		MessageInfos:      file_order_order_proto_msgTypes,
 	}.Build()
 	File_order_order_proto = out.File
