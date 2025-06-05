@@ -52,3 +52,7 @@ type CreateOrderResponse struct {
 	ID      string `json:"id"`
 	Message string `json:"message" validate:"omitempty,max=255"`
 }
+
+type GetAllOrdersResponse struct {
+	Orders []Order `json:"orders"`
+}

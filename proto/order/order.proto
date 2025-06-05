@@ -54,6 +54,13 @@ message CreateOrderResponse {
   string message = 2;
 }
 
+
+message GetAllOrdersRequest {}
+
+message GetAllOrdersResponse {
+  repeated Order orders = 1;
+}
 service OrderService {
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc GetAllOrders(GetAllOrdersRequest) returns (GetAllOrdersResponse);
 }

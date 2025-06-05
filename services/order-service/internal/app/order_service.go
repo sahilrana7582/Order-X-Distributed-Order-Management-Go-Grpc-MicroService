@@ -42,3 +42,29 @@ func (s *OrderService) CreateOrder(ctx context.Context, req *pb.CreateOrderReque
 		Message: res.Message,
 	}, nil
 }
+
+func (s *OrderService) GetAllOrders(ctx context.Context, req *pb.GetAllOrdersRequest) (*pb.GetAllOrdersResponse, error) {
+	res, err := s.OrderRepo.GetAllOrdersRequest(ctx)
+	if err != nil {
+		log.Printf("Error fetching all orders: %v", err)
+		return nil, err
+	}
+
+	var orders []*pb.Order
+	for _, order := range res.Orders {
+		orders = append(orders, &pb.Order{
+			Id:             order.ID,
+			CustomerId:     order.CustomerID,
+			OrderNumber:    order.OrderNumber,
+			OrderStatus:    pb.OrderStatus(pb.OrderStatus_value[string(order.OrderStatus)]),
+			PaymentStatus:  pb.PaymentStatus(pb.PaymentStatus_value[string(order.PaymentStatus)]),
+			ShippingMethod: pb.ShippingMethod(pb.ShippingMethod_value[string(order.ShippingMethod)]),
+			TotalAmount:    order.TotalAmount,
+			Currency:       order.Currency,
+		})
+	}
+
+	return &pb.GetAllOrdersResponse{
+		Orders: orders,
+	}, nil
+}

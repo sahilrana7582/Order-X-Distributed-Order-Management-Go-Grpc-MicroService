@@ -53,3 +53,29 @@ func (repo *OrderRepositoryImpl) CreateOrder(ctx context.Context, order *domains
 		Message: "Order created successfully",
 	}, nil
 }
+
+func (repo *OrderRepositoryImpl) GetAllOrdersRequest(ctx context.Context) (*domains.GetAllOrdersResponse, error) {
+	query := `
+		SELECT id, customer_id, order_number, order_status, payment_status, shipping_method, total_amount, currency
+		FROM orders;
+	`
+
+	rows, err := repo.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch orders: %w", err)
+	}
+	defer rows.Close()
+
+	var orders []domains.Order
+	for rows.Next() {
+		var order domains.Order
+		if err := rows.Scan(&order.ID, &order.CustomerID, &order.OrderNumber,
+			&order.OrderStatus, &order.PaymentStatus,
+			&order.ShippingMethod, &order.TotalAmount, &order.Currency); err != nil {
+			return nil, fmt.Errorf("failed to scan order: %w", err)
+		}
+		orders = append(orders, order)
+	}
+
+	return &domains.GetAllOrdersResponse{Orders: orders}, nil
+}
