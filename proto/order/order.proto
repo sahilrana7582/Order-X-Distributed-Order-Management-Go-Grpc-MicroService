@@ -54,13 +54,28 @@ message CreateOrderResponse {
   string message = 2;
 }
 
+message UpdateOrderRequest {
+  string order_id = 1;
+  optional OrderStatus order_status = 2;
+  optional PaymentStatus payment_status = 3;
+  optional ShippingMethod shipping_method = 4;
+  optional double total_amount = 5;
+  optional string currency = 6;
+}
+
+message UpdateOrderResponse {
+  string message = 1;
+  Order updated_order = 2;
+}
 
 message GetAllOrdersRequest {}
 
 message GetAllOrdersResponse {
   repeated Order orders = 1;
 }
+
 service OrderService {
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
   rpc GetAllOrders(GetAllOrdersRequest) returns (GetAllOrdersResponse);
+  rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse);
 }
