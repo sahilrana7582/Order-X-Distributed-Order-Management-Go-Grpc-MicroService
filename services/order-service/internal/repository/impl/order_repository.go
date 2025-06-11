@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/sahilrana7582/order-service/internal/domains"
@@ -78,4 +79,57 @@ func (repo *OrderRepositoryImpl) GetAllOrdersRequest(ctx context.Context) (*doma
 	}
 
 	return &domains.GetAllOrdersResponse{Orders: orders}, nil
+}
+
+func (repo *OrderRepositoryImpl) UpdateOrder(ctx context.Context, order *domains.Order) error {
+	query := `
+		UPDATE orders
+		SET
+			order_status = $1,
+			payment_status = $2
+		WHERE id = $3
+	`
+
+	res, err := repo.DB.ExecContext(ctx, query, order.OrderStatus, order.PaymentStatus, order.ID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("no rows updated: order ID not found")
+	}
+
+	return nil
+
+}
+
+func (r *OrderRepositoryImpl) GetOrderByID(ctx context.Context, id string) (*domains.Order, error) {
+	query := `
+        SELECT id, customer_id, order_number, order_status, payment_status, shipping_method, total_amount, currency
+        FROM orders
+        WHERE id = $1
+    `
+
+	var order domains.Order
+	err := r.DB.QueryRowContext(ctx, query, id).Scan(
+		&order.ID,
+		&order.CustomerID,
+		&order.OrderNumber,
+		&order.OrderStatus,
+		&order.PaymentStatus,
+		&order.ShippingMethod,
+		&order.TotalAmount,
+		&order.Currency,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &order, nil
 }
