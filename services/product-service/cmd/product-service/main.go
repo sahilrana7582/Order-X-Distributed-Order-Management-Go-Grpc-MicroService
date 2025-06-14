@@ -3,11 +3,13 @@ package main
 import (
 	"database/sql"
 	"log"
+	"net"
 
 	_ "github.com/lib/pq"
 	"github.com/sahilrana7582/product-service/configs"
 	"github.com/sahilrana7582/product-service/internal/db"
 	"github.com/sahilrana7582/product-service/internal/utils"
+	"google.golang.org/grpc"
 )
 
 type Application struct {
@@ -36,6 +38,20 @@ func main() {
 		LoggerInfo:  infoLog,
 		LoggerError: errLog,
 		DB:          conn,
+	}
+
+	grpcServer := grpc.NewServer()
+
+	infoLog.Println("Application started successfully")
+
+	lis, err := net.Listen("tcp", ":50053")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	infoLog.Println("gRPC server listening on port 50053")
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve grpc: %v", err)
 	}
 
 }
