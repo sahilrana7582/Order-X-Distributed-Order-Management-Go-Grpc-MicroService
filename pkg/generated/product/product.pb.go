@@ -127,17 +127,14 @@ type Product struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Sku           string                 `protobuf:"bytes,4,opt,name=sku,proto3" json:"sku,omitempty"`
 	Price         float64                `protobuf:"fixed64,5,opt,name=price,proto3" json:"price,omitempty"`
 	DiscountPrice float64                `protobuf:"fixed64,6,opt,name=discount_price,json=discountPrice,proto3" json:"discount_price,omitempty"`
-	TaxPercentage float64                `protobuf:"fixed64,7,opt,name=tax_percentage,json=taxPercentage,proto3" json:"tax_percentage,omitempty"`
-	Currency      string                 `protobuf:"bytes,8,opt,name=currency,proto3" json:"currency,omitempty"`
-	Status        ProductStatus          `protobuf:"varint,9,opt,name=status,proto3,enum=product.ProductStatus" json:"status,omitempty"`
-	Availability  AvailabilityStatus     `protobuf:"varint,10,opt,name=availability,proto3,enum=product.AvailabilityStatus" json:"availability,omitempty"`
-	StockQuantity int32                  `protobuf:"varint,11,opt,name=stock_quantity,json=stockQuantity,proto3" json:"stock_quantity,omitempty"`
-	CategoryIds   []string               `protobuf:"bytes,14,rep,name=category_ids,json=categoryIds,proto3" json:"category_ids,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Currency      string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
+	Status        ProductStatus          `protobuf:"varint,8,opt,name=status,proto3,enum=product.ProductStatus" json:"status,omitempty"`
+	Availability  AvailabilityStatus     `protobuf:"varint,9,opt,name=availability,proto3,enum=product.AvailabilityStatus" json:"availability,omitempty"`
+	StockQuantity int32                  `protobuf:"varint,10,opt,name=stock_quantity,json=stockQuantity,proto3" json:"stock_quantity,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     string                 `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -193,13 +190,6 @@ func (x *Product) GetDescription() string {
 	return ""
 }
 
-func (x *Product) GetSku() string {
-	if x != nil {
-		return x.Sku
-	}
-	return ""
-}
-
 func (x *Product) GetPrice() float64 {
 	if x != nil {
 		return x.Price
@@ -210,13 +200,6 @@ func (x *Product) GetPrice() float64 {
 func (x *Product) GetDiscountPrice() float64 {
 	if x != nil {
 		return x.DiscountPrice
-	}
-	return 0
-}
-
-func (x *Product) GetTaxPercentage() float64 {
-	if x != nil {
-		return x.TaxPercentage
 	}
 	return 0
 }
@@ -249,13 +232,6 @@ func (x *Product) GetStockQuantity() int32 {
 	return 0
 }
 
-func (x *Product) GetCategoryIds() []string {
-	if x != nil {
-		return x.CategoryIds
-	}
-	return nil
-}
-
 func (x *Product) GetCreatedAt() string {
 	if x != nil {
 		return x.CreatedAt
@@ -274,17 +250,12 @@ type CreateProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Sku           string                 `protobuf:"bytes,3,opt,name=sku,proto3" json:"sku,omitempty"`
 	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`
 	DiscountPrice float64                `protobuf:"fixed64,5,opt,name=discount_price,json=discountPrice,proto3" json:"discount_price,omitempty"`
-	TaxPercentage float64                `protobuf:"fixed64,6,opt,name=tax_percentage,json=taxPercentage,proto3" json:"tax_percentage,omitempty"`
 	Currency      string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
 	Status        ProductStatus          `protobuf:"varint,8,opt,name=status,proto3,enum=product.ProductStatus" json:"status,omitempty"`
 	Availability  AvailabilityStatus     `protobuf:"varint,9,opt,name=availability,proto3,enum=product.AvailabilityStatus" json:"availability,omitempty"`
 	StockQuantity int32                  `protobuf:"varint,10,opt,name=stock_quantity,json=stockQuantity,proto3" json:"stock_quantity,omitempty"`
-	// repeated ProductImage images = 11;
-	// repeated ProductVariant variants = 12;
-	CategoryIds   []string `protobuf:"bytes,13,rep,name=category_ids,json=categoryIds,proto3" json:"category_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -333,13 +304,6 @@ func (x *CreateProductRequest) GetDescription() string {
 	return ""
 }
 
-func (x *CreateProductRequest) GetSku() string {
-	if x != nil {
-		return x.Sku
-	}
-	return ""
-}
-
 func (x *CreateProductRequest) GetPrice() float64 {
 	if x != nil {
 		return x.Price
@@ -350,13 +314,6 @@ func (x *CreateProductRequest) GetPrice() float64 {
 func (x *CreateProductRequest) GetDiscountPrice() float64 {
 	if x != nil {
 		return x.DiscountPrice
-	}
-	return 0
-}
-
-func (x *CreateProductRequest) GetTaxPercentage() float64 {
-	if x != nil {
-		return x.TaxPercentage
 	}
 	return 0
 }
@@ -387,13 +344,6 @@ func (x *CreateProductRequest) GetStockQuantity() int32 {
 		return x.StockQuantity
 	}
 	return 0
-}
-
-func (x *CreateProductRequest) GetCategoryIds() []string {
-	if x != nil {
-		return x.CategoryIds
-	}
-	return nil
 }
 
 type CreateProductResponse struct {
@@ -452,38 +402,32 @@ var File_product_product_proto protoreflect.FileDescriptor
 
 const file_product_product_proto_rawDesc = "" +
 	"\n" +
-	"\x15product/product.proto\x12\aproduct\"\xda\x03\n" +
+	"\x15product/product.proto\x12\aproduct\"\xfe\x02\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x10\n" +
-	"\x03sku\x18\x04 \x01(\tR\x03sku\x12\x14\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x14\n" +
 	"\x05price\x18\x05 \x01(\x01R\x05price\x12%\n" +
-	"\x0ediscount_price\x18\x06 \x01(\x01R\rdiscountPrice\x12%\n" +
-	"\x0etax_percentage\x18\a \x01(\x01R\rtaxPercentage\x12\x1a\n" +
-	"\bcurrency\x18\b \x01(\tR\bcurrency\x12.\n" +
-	"\x06status\x18\t \x01(\x0e2\x16.product.ProductStatusR\x06status\x12?\n" +
-	"\favailability\x18\n" +
-	" \x01(\x0e2\x1b.product.AvailabilityStatusR\favailability\x12%\n" +
-	"\x0estock_quantity\x18\v \x01(\x05R\rstockQuantity\x12!\n" +
-	"\fcategory_ids\x18\x0e \x03(\tR\vcategoryIds\x12\x1d\n" +
-	"\n" +
-	"created_at\x18\x0f \x01(\tR\tcreatedAt\x12\x1d\n" +
-	"\n" +
-	"updated_at\x18\x10 \x01(\tR\tupdatedAt\"\x99\x03\n" +
-	"\x14CreateProductRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x10\n" +
-	"\x03sku\x18\x03 \x01(\tR\x03sku\x12\x14\n" +
-	"\x05price\x18\x04 \x01(\x01R\x05price\x12%\n" +
-	"\x0ediscount_price\x18\x05 \x01(\x01R\rdiscountPrice\x12%\n" +
-	"\x0etax_percentage\x18\x06 \x01(\x01R\rtaxPercentage\x12\x1a\n" +
+	"\x0ediscount_price\x18\x06 \x01(\x01R\rdiscountPrice\x12\x1a\n" +
 	"\bcurrency\x18\a \x01(\tR\bcurrency\x12.\n" +
 	"\x06status\x18\b \x01(\x0e2\x16.product.ProductStatusR\x06status\x12?\n" +
 	"\favailability\x18\t \x01(\x0e2\x1b.product.AvailabilityStatusR\favailability\x12%\n" +
 	"\x0estock_quantity\x18\n" +
-	" \x01(\x05R\rstockQuantity\x12!\n" +
-	"\fcategory_ids\x18\r \x03(\tR\vcategoryIds\"A\n" +
+	" \x01(\x05R\rstockQuantity\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\v \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\f \x01(\tR\tupdatedAt\"\xbd\x02\n" +
+	"\x14CreateProductRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
+	"\x05price\x18\x04 \x01(\x01R\x05price\x12%\n" +
+	"\x0ediscount_price\x18\x05 \x01(\x01R\rdiscountPrice\x12\x1a\n" +
+	"\bcurrency\x18\a \x01(\tR\bcurrency\x12.\n" +
+	"\x06status\x18\b \x01(\x0e2\x16.product.ProductStatusR\x06status\x12?\n" +
+	"\favailability\x18\t \x01(\x0e2\x1b.product.AvailabilityStatusR\favailability\x12%\n" +
+	"\x0estock_quantity\x18\n" +
+	" \x01(\x05R\rstockQuantity\"A\n" +
 	"\x15CreateProductResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage*M\n" +
