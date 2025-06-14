@@ -79,3 +79,11 @@ service OrderService {
   rpc GetAllOrders(GetAllOrdersRequest) returns (GetAllOrdersResponse);
   rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse);
 }
+
+
+// message CreateOrderItem {
+//   string id = 1;
+//   string name = 2;
+//   string description = 3;
+//   string 
+// }
