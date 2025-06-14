@@ -1,7 +1,41 @@
 package main
 
-import "fmt"
+import (
+	"database/sql"
+	"log"
+
+	_ "github.com/lib/pq"
+	"github.com/sahilrana7582/product-service/configs"
+	"github.com/sahilrana7582/product-service/internal/db"
+	"github.com/sahilrana7582/product-service/internal/utils"
+)
+
+type Application struct {
+	Config      *configs.Config
+	LoggerInfo  *log.Logger
+	LoggerError *log.Logger
+	DB          *sql.DB
+}
+
+var App *Application
 
 func main() {
-	fmt.Println("Application Running")
+	infoLog, errLog := utils.InitLogger()
+
+	cfg, err := configs.LoadConfig()
+	if err != nil {
+		errLog.Fatalf("could not load config: %v", err)
+	}
+	conn, err := db.InitDB(cfg.DB.Host, cfg.DB.Port, cfg.DB.User, cfg.DB.Password, cfg.DB.Name, cfg.DB.SSLMode, infoLog)
+	if err != nil {
+		errLog.Println("Error connecting to DB:", err)
+	}
+
+	App = &Application{
+		Config:      cfg,
+		LoggerInfo:  infoLog,
+		LoggerError: errLog,
+		DB:          conn,
+	}
+
 }
