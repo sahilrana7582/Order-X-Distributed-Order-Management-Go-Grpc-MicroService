@@ -6,8 +6,11 @@ import (
 	"net"
 
 	_ "github.com/lib/pq"
+	pb "github.com/sahilrana7582/orderX/pkg/generated/product"
 	"github.com/sahilrana7582/product-service/configs"
 	"github.com/sahilrana7582/product-service/internal/db"
+	"github.com/sahilrana7582/product-service/internal/handler"
+	"github.com/sahilrana7582/product-service/internal/repository/impl"
 	"github.com/sahilrana7582/product-service/internal/utils"
 	"google.golang.org/grpc"
 )
@@ -40,18 +43,22 @@ func main() {
 		DB:          conn,
 	}
 
-	grpcServer := grpc.NewServer()
+	repo := impl.NewProductRepository(conn)
 
-	infoLog.Println("Application started successfully")
+	productHandler := handler.NewProductHandler(repo)
 
 	lis, err := net.Listen("tcp", ":50053")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
-	infoLog.Println("gRPC server listening on port 50053")
 
+	grpcServer := grpc.NewServer()
+
+	pb.RegisterProductServiceServer(grpcServer, productHandler)
+
+	infoLog.Println("gRPC server is running on :50051")
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve grpc: %v", err)
+		log.Fatalf("Failed to serve gRPC server: %v", err)
 	}
 
 }
