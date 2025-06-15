@@ -41,3 +41,27 @@ func (h *ProductHandler) CreateProduct(ctx context.Context, req *pb.CreateProduc
 		Message: "Product created successfully",
 	}, nil
 }
+
+func (h *ProductHandler) UpdateProduct(ctx context.Context, req *pb.UpdateProductRequest) (*pb.UpdateProductResponse, error) {
+	product := &domains.Product{
+		ID:            req.GetId(),
+		Name:          req.GetName(),
+		Description:   req.GetDescription(),
+		Price:         req.GetPrice(),
+		DiscountPrice: req.GetDiscountPrice(),
+		Currency:      req.GetCurrency(),
+		Status:        req.GetStatus().String(),
+		Availability:  req.GetAvailability().String(),
+		StockQuantity: req.GetStockQuantity(),
+	}
+
+	id, err := h.repo.UpdateProduct(ctx, product)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateProductResponse{
+		Id:      id,
+		Message: "Product updated successfully",
+	}, nil
+}
