@@ -37,6 +37,7 @@ func (h *ProductHandler) CreateProduct(ctx context.Context, req *pb.CreateProduc
 	}
 
 	return &pb.CreateProductResponse{
-		Id: id,
+		Id:      id,
+		Message: "Product created successfully",
 	}, nil
 }

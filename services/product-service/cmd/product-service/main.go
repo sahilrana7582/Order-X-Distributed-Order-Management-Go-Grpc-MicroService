@@ -56,7 +56,7 @@ func main() {
 
 	pb.RegisterProductServiceServer(grpcServer, productHandler)
 
-	infoLog.Println("gRPC server is running on :50051")
+	infoLog.Println("gRPC server is running on :50053")
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC server: %v", err)
 	}
