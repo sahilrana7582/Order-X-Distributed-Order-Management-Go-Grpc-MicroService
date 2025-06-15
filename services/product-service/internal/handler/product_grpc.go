@@ -106,3 +106,37 @@ func (h *ProductHandler) DeleteProduct(ctx context.Context, req *pb.DeleteProduc
 		Message: "Product deleted successfully",
 	}, nil
 }
+
+func (h *ProductHandler) ListProducts(ctx context.Context, req *pb.ListProductsRequest) (*pb.ListProductsResponse, error) {
+	page := req.GetPage()
+	limit := req.GetLimit()
+
+	products, total, err := h.repo.GetAll(ctx, page, limit)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list products: %v", err)
+	}
+
+	var pbProducts []*pb.Product
+	for _, p := range products {
+		pbProducts = append(pbProducts, &pb.Product{
+			Id:            p.ID,
+			Name:          p.Name,
+			Description:   p.Description,
+			Price:         p.Price,
+			DiscountPrice: p.DiscountPrice,
+			Currency:      p.Currency,
+			Status:        pb.ProductStatus(pb.ProductStatus_value[p.Status]),
+			Availability:  pb.AvailabilityStatus(pb.AvailabilityStatus_value[p.Availability]),
+			StockQuantity: int32(p.StockQuantity),
+			CreatedAt:     p.CreatedAt.String(),
+			UpdatedAt:     p.UpdatedAt.String(),
+		})
+	}
+
+	return &pb.ListProductsResponse{
+		Products: pbProducts,
+		Total:    total,
+		Page:     page,
+		Limit:    limit,
+	}, nil
+}

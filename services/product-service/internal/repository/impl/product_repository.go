@@ -144,3 +144,61 @@ func (r *productRepository) DeleteProduct(ctx context.Context, id string) error 
 
 	return nil
 }
+
+func (r *productRepository) GetAll(ctx context.Context, page, limit int32) ([]*domains.Product, int32, error) {
+	if page <= 0 {
+		page = 1
+	}
+
+	if limit <= 0 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	query := `
+		SELECT * from products
+		ORDER BY created_at DESC
+		LIMIT $1 OFFSET $2
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, limit, offset)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to query products: %w", err)
+	}
+	defer rows.Close()
+
+	var products []*domains.Product
+
+	for rows.Next() {
+		var p domains.Product
+
+		err := rows.Scan(
+			&p.ID,
+			&p.Name,
+			&p.Description,
+			&p.Price,
+			&p.DiscountPrice,
+			&p.Currency,
+			&p.Status,
+			&p.Availability,
+			&p.StockQuantity,
+			&p.CreatedAt,
+			&p.UpdatedAt,
+		)
+		if err != nil {
+			return nil, 0, fmt.Errorf("failed to scan product: %w", err)
+		}
+		products = append(products, &p)
+	}
+
+	var total int32
+	countQuery := `SELECT COUNT(*) FROM products`
+	err = r.db.QueryRowContext(ctx, countQuery).Scan(&total)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to count products: %w", err)
+	}
+
+	return products, total, nil
+
+}

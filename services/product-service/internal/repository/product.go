@@ -11,4 +11,5 @@ type ProductRepository interface {
 	UpdateProduct(ctx context.Context, product *domains.Product) (string, error)
 	GetById(ctx context.Context, id string) (*domains.Product, error)
 	DeleteProduct(ctx context.Context, id string) error
+	GetAll(ctx context.Context, page, limit int32) ([]*domains.Product, int32, error)
 }
