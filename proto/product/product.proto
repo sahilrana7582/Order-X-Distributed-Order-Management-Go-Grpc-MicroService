@@ -101,45 +101,45 @@ message UpdateProductResponse {
 
 // ---------------- Get / Delete / List ---------------- //
 
-// message GetProductByIdRequest {
-//   string id = 1;
-// }
+message GetProductByIdRequest {
+  string id = 1;
+}
 
-// message GetProductByIdResponse {
-//   Product product = 1;
-// }
+message GetProductByIdResponse {
+  Product product = 1;
+}
 
-// message DeleteProductRequest {
-//   string id = 1;
-// }
+message DeleteProductRequest {
+  string id = 1;
+}
 
-// message DeleteProductResponse {
-//   string message = 1;
-// }
+message DeleteProductResponse {
+  string message = 1;
+}
 
-// message ListProductsRequest {
-//   optional int32 page = 1;
-//   optional int32 limit = 2;
+message ListProductsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
 //   optional string search = 3;
 //   optional string sort_by = 4;
 //   optional string order = 5; // "asc" | "desc"
 //   optional string category_id = 6;
 //   optional ProductStatus status = 7;
-// }
+}
 
-// message ListProductsResponse {
-//   repeated Product products = 1;
-//   int32 total = 2;
-//   int32 page = 3;
-//   int32 limit = 4;
-// }
+message ListProductsResponse {
+  repeated Product products = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
 
 // ---------------- Service ---------------- //
 
 service ProductService {
   rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
   rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
-//   rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
-//   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
-//   rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+  rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
 }

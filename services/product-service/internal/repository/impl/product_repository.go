@@ -82,3 +82,65 @@ func (r *productRepository) UpdateProduct(ctx context.Context, product *domains.
 
 	return id, nil
 }
+
+func (r *productRepository) GetById(ctx context.Context, id string) (*domains.Product, error) {
+	query := `
+		SELECT
+			id, name, description, price, discount_price,
+			currency, status, availability, stock_quantity,
+			created_at, updated_at
+		FROM products
+		WHERE id = $1
+	`
+
+	row := r.db.QueryRowContext(ctx, query, id)
+
+	var product domains.Product
+
+	err := row.Scan(
+		&product.ID,
+		&product.Name,
+		&product.Description,
+		&product.Price,
+		&product.DiscountPrice,
+		&product.Currency,
+		&product.Status,
+		&product.Availability,
+		&product.StockQuantity,
+		&product.CreatedAt,
+		&product.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("product not found")
+		}
+		return nil, fmt.Errorf("failed to fetch product by ID: %w", err)
+	}
+
+	return &product, nil
+
+}
+
+func (r *productRepository) DeleteProduct(ctx context.Context, id string) error {
+	query := `
+		DELETE FROM products
+		WHERE id = $1
+	`
+
+	result, err := r.db.ExecContext(ctx, query, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete product: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
+}
